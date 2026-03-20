@@ -16,24 +16,20 @@ export default function HomePage() {
 
 	const titleOpacity = useTransform(
 		scrollYProgress,
-		[0, 0.01, 0.07, 0.12],
-		[1, 1, 1, 0]
+		[0, 0.04, 0.12],
+		[1, 1, 0]
 	);
-	const titleY = useTransform(
-		scrollYProgress,
-		[0, 0.07, 0.14],
-		['0vh', '0vh', '-20vh']
-	);
+	const titleY = useTransform(scrollYProgress, [0, 0.14], ['0vh', '-15vh']);
 
 	const phraseOpacity = useTransform(
 		scrollYProgress,
-		[0.07, 0.12, 0.5, 0.65],
+		[0.15, 0.24, 0.5, 0.65],
 		[0, 1, 0.85, 0]
 	);
 	const phraseY = useTransform(
 		scrollYProgress,
-		[0.07, 0.14, 0.45, 0.7],
-		['20vh', '0vh', '-10vh', '-40vh']
+		[0.15, 0.24, 0.45, 0.7],
+		['15vh', '0vh', '-10vh', '-40vh']
 	);
 
 	const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.04], [1, 0]);
@@ -42,7 +38,7 @@ export default function HomePage() {
 	return (
 		<div className="bg-obsidian">
 			{/* ===== SCROLL-DRIVEN CINEMATIC SECTION ===== */}
-			<div ref={containerRef} className="relative" style={{ height: '600vh' }}>
+			<div ref={containerRef} className="relative" style={{ height: '400vh' }}>
 				<div className="sticky top-0 h-screen w-full overflow-hidden">
 					{/* Flying images (behind everything) */}
 					<PhotoRainBackground scrollProgress={scrollYProgress} />
@@ -75,8 +71,7 @@ export default function HomePage() {
 						className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none select-none"
 					>
 						<p className="font-serif text-3xl md:text-5xl lg:text-6xl text-cream/80 font-light leading-snug text-center max-w-4xl px-8">
-							I don't photograph destinations.
-							<br />I photograph the journey.
+							Not all journeys are meant to be <br /> rushed
 						</p>
 					</motion.div>
 

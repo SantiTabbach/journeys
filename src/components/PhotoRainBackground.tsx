@@ -33,7 +33,7 @@ function generatePhotos(count: number): FlyingPhoto[] {
 			src: img.src.replace('w=1920', 'w=600'),
 			angle,
 			distance: 35 + rand(1) * 40,
-			size: 6 + rand(3) * 5,
+			size: 10 + rand(3) * 8,
 			delay: rand(6) * 0.2,
 		});
 	}
@@ -56,42 +56,65 @@ function FlyingPhotoItem({
 }: FlyingPhotoItemProps) {
 	const stagger = photo.delay + (index / total) * 0.12;
 
-	const appearAt = 0.1 + stagger;
-	const spreadAt = appearAt + 0.05;
-	const fullAt = 0.5 + stagger * 0.6;
-	const exitAt = Math.min(fullAt + 0.1, 0.85);
+	const preloadAt = 0.1;
+	const visibleAt = 0.18;
+	const flyStart = 0.24 + stagger;
+	const flyEnd = 0.5 + stagger * 0.6;
+	const exitAt = Math.min(flyEnd + 0.1, 0.85);
 
 	const tx = Math.cos(photo.angle) * photo.distance;
 	const ty = Math.sin(photo.angle) * photo.distance * 0.55;
 
 	const x = useTransform(
 		scrollProgress,
-		[0, appearAt, spreadAt, fullAt, exitAt],
-		[`0vw`, `0vw`, `${tx * 0.15}vw`, `${tx}vw`, `${tx * 1.25}vw`]
+		[0, preloadAt, visibleAt, flyStart, flyEnd, exitAt],
+		[
+			`0vw`,
+			`${tx * 0.04}vw`,
+			`${tx * 0.1}vw`,
+			`${tx * 0.2}vw`,
+			`${tx}vw`,
+			`${tx * 1.25}vw`,
+		]
 	);
 
 	const y = useTransform(
 		scrollProgress,
-		[0, appearAt, spreadAt, fullAt, exitAt],
-		[`0vw`, `0vw`, `${ty * 0.15}vw`, `${ty}vw`, `${ty * 1.25}vw`]
+		[0, preloadAt, visibleAt, flyStart, flyEnd, exitAt],
+		[
+			`0vh`,
+			`${ty * 0.04}vh`,
+			`${ty * 0.1}vh`,
+			`${ty * 0.2}vh`,
+			`${ty}vh`,
+			`${ty * 1.25}vh`,
+		]
 	);
 
 	const scale = useTransform(
 		scrollProgress,
-		[0, appearAt, spreadAt, fullAt, exitAt],
-		[0.06, 0.06, 0.2, 1, 1.6]
+		[0, preloadAt - 0.01, preloadAt, visibleAt, flyStart, flyEnd, exitAt],
+		[0, 0, 0.08, 0.15, 0.22, 1.2, 1.8]
 	);
 
 	const opacity = useTransform(
 		scrollProgress,
-		[0, appearAt, appearAt + 0.02, fullAt * 0.7, exitAt - 0.04, exitAt],
-		[0, 0, 0.9, 0.9, 0.5, 0]
+		[
+			0,
+			preloadAt - 0.01,
+			preloadAt,
+			visibleAt,
+			flyEnd * 0.6,
+			exitAt - 0.04,
+			exitAt,
+		],
+		[0, 0, 0.15, 0.7, 0.9, 0.5, 0]
 	);
 
 	const rotateEnd = (seededRandom(photo.id * 77) - 0.5) * 6;
 	const rotate = useTransform(
 		scrollProgress,
-		[0, appearAt, fullAt],
+		[0, preloadAt, flyEnd],
 		[0, 0, rotateEnd]
 	);
 
